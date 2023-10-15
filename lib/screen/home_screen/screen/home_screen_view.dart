@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/screen/home_screen/screen/home_view.dart';
+
+import '../../login_screen/login_screen_view.dart';
 
 
 
@@ -17,7 +20,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Đặt tour du lịch')),
+        title:  Center(child: Text(tab[_currentIndex])),
       ),
       body: PageView(
         controller: _pageController,
@@ -26,17 +29,21 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             _currentIndex = index;
           });
         },
-        children: const [
-          Center(
-            child: Text('Page 1'),
-          ),
-
+        children:  [
+          const HomeView(),
           Center(
             child: Text('Page 2'),
           ),
 
           Center(
-            child: Text('Page 3'),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => LoginScreenView(),
+                ));
+              },
+              child: const Text('Đăng xuất'),
+            ),
           ),
         ],
       ),
@@ -49,18 +56,18 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             curve: Curves.ease,
           );
         },
-        items: const [
+        items:  [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Trang chủ',
+            icon: const Icon(Icons.home),
+            label: tab[0],
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Lịch sử',
+            icon: const Icon(Icons.history),
+            label: tab[1],
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Hồ sơ',
+            icon: const Icon(Icons.person),
+            label: tab[2],
           ),
         ],
       ),
@@ -72,4 +79,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     _pageController.dispose();
     super.dispose();
   }
+
+  List<String> tab = [
+    "Trang chủ",
+    "Lịch sử",
+    "Hồ sơ"
+  ];
 }

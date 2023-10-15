@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../home_screen/home_screen_view.dart';
+import '../home_screen/screen/home_screen_view.dart';
 
 class LoginScreenView extends StatefulWidget{
   const LoginScreenView({super.key});
@@ -21,11 +21,11 @@ class _LoginScreenViewState extends State<LoginScreenView> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('ĐẶT TOUR DU LỊCH')),
-        // toolbarHeight: 80,
-        // titleTextStyle: const TextStyle(
-        //   fontWeight: FontWeight.w600,
-        //   fontSize: 30
-        // ),
+        toolbarHeight: 80,
+        titleTextStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 30
+        ),
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
