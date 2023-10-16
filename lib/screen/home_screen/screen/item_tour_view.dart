@@ -33,12 +33,13 @@ class ItemTourView extends StatelessWidget{
               width: screenWidth,
               fit: BoxFit.cover,
               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null)
+                if (loadingProgress == null) {
                   return child;
-                return CircularProgressIndicator();
+                }
+                return const CircularProgressIndicator();
               },
               errorBuilder: (context, error, stackTrace) {
-                return Icon(Icons.error);
+                return const Icon(Icons.error);
               },
             ),
             const SizedBox(height: 5,),
@@ -80,7 +81,7 @@ class ItemTourView extends StatelessWidget{
                           ),
                           SizedBox(height: 5,),
                           Text(
-                            'Giá: ${tour.gia} VNĐ',
+                            'Giá: ${Tour.formatToVietnameseMoney(tour.gia)} VNĐ',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.red,

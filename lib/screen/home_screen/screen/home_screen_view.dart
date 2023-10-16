@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/model/user_model.dart';
 import 'package:flutter_book_tour/screen/home_screen/screen/home_view.dart';
 
 import '../../login_screen/login_screen_view.dart';
+import 'infor_screen.dart';
+import 'infor_screen_view.dart';
 
 
 
@@ -16,9 +19,19 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
+  late User user = User(
+      uid: 1,
+      username: "hoang",
+      password: "123",
+      name: "Lê Huy Hoàng",
+      email: "lehuyhoangt3@gmail.com",
+      avt: "https://scontent.fhan20-1.fna.fbcdn.net/v/t1.15752-9/393465944_291669270480464_6561957402276023511_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=Oy7jtwMOPToAX8hpXRo&_nc_ht=scontent.fhan20-1.fna&oh=03_AdTBOYWBWzKeV280Belcf7fw0tPH49stdASSkgRCvNCdAg&oe=6554A889"
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange[20],
       appBar: AppBar(
         title:  Center(child: Text(tab[_currentIndex])),
       ),
@@ -29,22 +42,14 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             _currentIndex = index;
           });
         },
-        children:  [
-          const HomeView(),
-          Center(
+        children:   [
+           const HomeView(),
+
+           const Center(
             child: Text('Page 2'),
           ),
 
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => LoginScreenView(),
-                ));
-              },
-              child: const Text('Đăng xuất'),
-            ),
-          ),
+          PersonalInfoScreenView(user: user,),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

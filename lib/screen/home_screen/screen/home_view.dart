@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/screen/home_screen/screen/tin_tuc_view.dart';
+import 'package:flutter_book_tour/screen/home_screen/screen/tour_detal_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../assets_manager.dart';
 import '../../../model/tour_model.dart';
+import 'book_tour_screen.dart';
 import 'item_tour_view.dart';
 
 class HomeView extends StatefulWidget{
@@ -72,9 +74,12 @@ class _HomeViewState extends State<HomeView> {
           ),
           const SizedBox(height: 10,),
           TinTucView(
-            onTap: (int value) {
+            featuredImages: Tour.listTourNoiBat(),
+            onTap: (Tour tour) {
             // click tour noi bat
-              print("hoangdev");
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>  TourDetalScreen(tour: tour,),
+              ));
             },
           ),
           const SizedBox(height: 10,),
@@ -97,11 +102,15 @@ class _HomeViewState extends State<HomeView> {
               Tour tour = listTour[index];
               return ItemTourView(
                 tour: tour,
-                onDatTour: (value) {
-                  print("ĐẶT TOUR - ${value.ten}");
+                onDatTour: (tour) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>  BookTourScreen(tour: tour,),
+                  ));
                 },
-                onChiTiet: (value) {
-                  print("XEM CHI TIẾT TOUR: - ${value.ten}");
+                onChiTiet: (tour) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>  TourDetalScreen(tour: tour,),
+                  ));
                 },
               );
             },

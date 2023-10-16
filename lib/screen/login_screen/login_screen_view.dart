@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../../assets_manager.dart';
 import '../home_screen/screen/home_screen_view.dart';
 
 class LoginScreenView extends StatefulWidget{
@@ -19,78 +21,96 @@ class _LoginScreenViewState extends State<LoginScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('ĐẶT TOUR DU LỊCH')),
-        toolbarHeight: 80,
-        titleTextStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 30
-        ),
-      ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF0561FB),
+      // appBar: AppBar(
+      //   title: const Center(child: Text('ĐẶT TOUR DU LỊCH')),
+      //   toolbarHeight: 80,
+      //   titleTextStyle: const TextStyle(
+      //     fontWeight: FontWeight.w600,
+      //     fontSize: 30
+      //   ),
+      // ),
       body: _buildBody(),
     );
   }
 
   _buildBody(){
     return Padding(
-      padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
-      child: Container(
-        color: Colors.white,
-        height: 400,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Text(
-                "Đăng nhập",
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Center(
+        child: Container(
+          height: 350,
+          decoration: BoxDecoration(
+            color: Colors.white, // Màu nền của Container
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
+                  ImageAssets.ic_tour,
+                  height: 60,
+                  width: 60,
                 ),
-              ),
-              SizedBox(height: 20,),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Tài khoản',
-                  border: OutlineInputBorder(
-                      borderRadius : BorderRadius.all(Radius.circular(12))
+                const Text(
+                  'Đăng nhập',
+                  style: TextStyle(
+                    color: Color(0xFF036BCB),
+                    fontSize: 26,
+                    fontFamily: 'Barlow Condensed',
+                    fontWeight: FontWeight.w700,
+                    height: 0,
+                    letterSpacing: 1,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: ischeckMK,
-                decoration:  InputDecoration(
-                  labelText: 'Mật Khẩu',
-                  border: const OutlineInputBorder(
-                      borderRadius : BorderRadius.all(Radius.circular(12))
+                SizedBox(height: 20,),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Tài khoản',
+                    border: OutlineInputBorder(
+                        borderRadius : BorderRadius.all(Radius.circular(12))
+                    ),
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(ischeckMK ? Icons.visibility : Icons.visibility_off),
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: ischeckMK,
+                  decoration:  InputDecoration(
+                    labelText: 'Mật Khẩu',
+                    border: const OutlineInputBorder(
+                        borderRadius : BorderRadius.all(Radius.circular(12))
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(ischeckMK ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          ischeckMK = !ischeckMK;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Container(
+                  child: ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        ischeckMK = !ischeckMK;
-                      });
+                      String email = _emailController.text;
+                      String password = _passwordController.text;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => HomeScreenView(),
+                      ));
                     },
+                    child: const Text(
+                      'Đăng Nhập',
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  String email = _emailController.text;
-                  String password = _passwordController.text;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => HomeScreenView(),
-                  ));
-                },
-                child: const Text('Đăng Nhập'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

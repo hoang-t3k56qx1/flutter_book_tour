@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_book_tour/model/tour_model.dart';
-import 'package:flutter_book_tour/screen/home_screen/screen/tin_tuc_item_view.dart';
 
-import '../../../assets_manager.dart';
-import '../../../model/tin_tuc_moi_model.dart';
 
-class TinTucView extends StatefulWidget {
-  const TinTucView({required this.featuredImages, required this.onTap ,super.key});
-  final ValueChanged<Tour> onTap;
-  final List<Tour> featuredImages;
+class ImgTourDetalView extends StatefulWidget {
+  const ImgTourDetalView({super.key, required this.featuredImages});
+  final List<String> featuredImages;
+
 
   @override
-  _TinTucViewState createState() => _TinTucViewState();
+  _ImgTourDetalViewState createState() => _ImgTourDetalViewState();
 }
 
-class _TinTucViewState extends State<TinTucView> {
+class _ImgTourDetalViewState extends State<ImgTourDetalView> {
   final PageController _controller = PageController(initialPage: 0, viewportFraction: 0.9,);
-  List<Tour> _featuredImages = [];
+  late List<String> _featuredImages = [];
 
   int _currentPage = 0;
 
@@ -35,25 +31,34 @@ class _TinTucViewState extends State<TinTucView> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        // Phần hiển thị hình ảnh nổi bật
         Container(
           height: 200,
           child: PageView.builder(
             controller: _controller,
             itemCount: _featuredImages.length,
             itemBuilder: (BuildContext context, int index) {
-              Tour item = _featuredImages[index];
+              String img = _featuredImages[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 8,bottom: 8),
-                child: InkWell(
-                  onTap: (){
-                    widget.onTap(item);
+                child: Image.network(
+                  img,
+                  height: 200,
+                  width: screenWidth - 60.0,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return const CircularProgressIndicator();
                   },
-                  child: ItemWithTextOverlay(item: item,),
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.error);
+                  },
                 ),
-              );
+                );
             },
           ),
         ),

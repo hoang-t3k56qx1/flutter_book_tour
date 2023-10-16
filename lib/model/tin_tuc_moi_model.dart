@@ -3,5 +3,9 @@ class TinTucItemModel {
   String title;
   String content;
 
-  TinTucItemModel({required this.img,required this.title,required this.content});
+  TinTucItemModel({
+    required this.img,
+    required this.title,
+    required this.content
+  });
 }

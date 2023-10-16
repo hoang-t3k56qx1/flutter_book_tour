@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/model/tour_model.dart';
 
 import '../../../model/tin_tuc_moi_model.dart';
 
 class ItemWithTextOverlay extends StatelessWidget {
   const ItemWithTextOverlay({required this.item, Key? key}) : super(key: key);
-  final TinTucItemModel item;
+  final Tour item;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +18,20 @@ class ItemWithTextOverlay extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              Image.asset(
-                item.img,
+              Image.network(
+                item.imgs[0],
                 height: 200,
                 width: screenWidth - 60.0,
                 fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return const CircularProgressIndicator();
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error);
+                },
               ),
               Container(
                 width: screenWidth - 60.0,
@@ -47,7 +57,7 @@ class ItemWithTextOverlay extends StatelessWidget {
             children: <Widget>[
               Center(
                 child: Text(
-                  item.title,
+                  item.ten,
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -59,7 +69,7 @@ class ItemWithTextOverlay extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  item.content,
+                  item.moTa,
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white, // Màu của văn bản
