@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/screen/login_screen/login_screen_view.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../assets_manager.dart';
@@ -133,6 +134,30 @@ class _LogoutScreenViewState extends State<LogoutScreenView> {
                       'Đăng ký',
                     ),
                   ),
+                ),
+                const SizedBox(height: 20,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => LoginScreenView(),
+                        ));
+                      },
+                      child: const SizedBox(
+                        height: 30,
+                        child: Text(
+                          "Quay về đăng nhập",
+                          style: TextStyle(
+                              color: Colors.lightBlue
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

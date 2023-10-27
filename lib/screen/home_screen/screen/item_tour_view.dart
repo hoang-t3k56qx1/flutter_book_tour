@@ -1,19 +1,23 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/tour_model.dart';
 
-class ItemTourView extends StatelessWidget{
+class ItemTourView extends StatelessWidget {
   const ItemTourView({
     required this.tour,
     required this.onDatTour,
     required this.onChiTiet,
-    super.key
+    required this.onCapNhap,
+    required this.typeHome,
+    required this.onXoa,
+    super.key,
   });
 
   final Tour tour;
   final ValueChanged<Tour> onDatTour;
   final ValueChanged<Tour> onChiTiet;
+  final ValueChanged<Tour> onCapNhap;
+  final ValueChanged<Tour> onXoa;
+  final bool typeHome;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,8 @@ class ItemTourView extends StatelessWidget{
               height: 200,
               width: screenWidth,
               fit: BoxFit.cover,
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
@@ -42,7 +47,9 @@ class ItemTourView extends StatelessWidget{
                 return const Icon(Icons.error);
               },
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -51,121 +58,11 @@ class ItemTourView extends StatelessWidget{
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Column(
-                        crossAxisAlignment : CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Tour: ${tour.ten}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF082455),
-                              fontSize: 16,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 5,),
-                          Text(
-                            "Lịch trình: ${tour.lichTrinh}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF082455),
-                              fontSize: 16,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 5,),
-                          Text(
-                            'Giá: ${Tour.formatToVietnameseMoney(tour.gia)} VNĐ',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 130,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              onDatTour(tour);
-                            },
-                            child: Container(
-                              width: 130,
-                              height: 40,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: ShapeDecoration(
-                                color: Colors.red,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'ĐẶT TOUR',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w600,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5,),
-                          InkWell(
-                            onTap: () {
-                              onChiTiet(tour);
-                            },
-                            child: Container(
-                              width: 130,
-                              height: 40,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFF036BCB),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'CHI TIẾT',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w600,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  children: <Widget>[
+                    _buildThongTin(),
+                    (typeHome == true)
+                        ? _buidldActionHome()
+                        : _buidldActionAdmin(),
                   ],
                 )
               ],
@@ -176,4 +73,209 @@ class ItemTourView extends StatelessWidget{
     );
   }
 
+  Widget _buidldActionAdmin() {
+    return Container(
+      width: 130,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () {
+              onCapNhap(tour);
+            },
+            child: Container(
+              width: 130,
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: ShapeDecoration(
+                color: const Color(0xFF036BCB),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'CẬP NHẬP',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 5,),
+          InkWell(
+            onTap: () {
+              onXoa(tour);
+            },
+            child: Container(
+              width: 130,
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: ShapeDecoration(
+                color: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'XÓA',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buidldActionHome() {
+    return Container(
+      width: 130,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () {
+              onDatTour(tour);
+            },
+            child: Container(
+              width: 130,
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: ShapeDecoration(
+                color: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'ĐẶT TOUR',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          InkWell(
+            onTap: () {
+              onChiTiet(tour);
+            },
+            child: Container(
+              width: 130,
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: ShapeDecoration(
+                color: const Color(0xFF036BCB),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'CHI TIẾT',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildThongTin() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Tour: ${tour.ten}",
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF082455),
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            "Lịch trình: ${tour.lichTrinh}",
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF082455),
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            'Giá: ${Tour.formatToVietnameseMoney(tour.gia)} VNĐ',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.red,
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

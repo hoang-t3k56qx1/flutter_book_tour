@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/user_model.dart';
+import 'package:flutter_book_tour/screen/admin_screen/admin_screen.dart';
 import 'package:flutter_book_tour/screen/home_screen/screen/home_view.dart';
 
 import '../../login_screen/login_screen_view.dart';
@@ -21,7 +22,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   late User user = User(
       uid: 1,
-      username: "hoang",
+      username: "admin",
       password: "123",
       name: "Lê Huy Hoàng",
       email: "lehuyhoangt3@gmail.com",
@@ -30,10 +31,21 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<String> tab = [
+      "Trang chủ",
+      (user.username == "admin") ? "Admin" : "Đơn đặt",
+      "Hồ sơ"
+    ];
+
     return Scaffold(
       backgroundColor: Colors.orange[20],
       appBar: AppBar(
-        title:  Center(child: Text(tab[_currentIndex])),
+        title:  Center(
+            child: Text(
+                (tab[_currentIndex] == "Admin") ? "Quản lý tour" : tab[_currentIndex],
+            )
+        ),
       ),
       body: PageView(
         controller: _pageController,
@@ -45,9 +57,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         children:   [
            const HomeView(),
 
-           const Center(
+          (user.username == "admin") ?
+          AdminScreenView() : const Center(
             child: Text('Page 2'),
           ),
+
+          // AdminScreenView(),
 
           PersonalInfoScreenView(user: user,),
         ],
@@ -63,16 +78,23 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         },
         items:  [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.home,),
             label: tab[0],
           ),
+          (user.username == "admin") ?
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.admin_panel_settings_outlined),
+            label: tab[1],
+          ) :
           BottomNavigationBarItem(
             icon: const Icon(Icons.history),
             label: tab[1],
+            //   backgroundColor: Colors.black26
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
             label: tab[2],
+            // backgroundColor: Colors.black26
           ),
         ],
       ),
@@ -85,9 +107,4 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     super.dispose();
   }
 
-  List<String> tab = [
-    "Trang chủ",
-    "Lịch sử",
-    "Hồ sơ"
-  ];
 }

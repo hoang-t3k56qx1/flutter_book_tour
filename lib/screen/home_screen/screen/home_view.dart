@@ -138,6 +138,13 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context) =>  TourDetalScreen(tour: tour,),
               ));
             },
+            onCapNhap: (value) {
+
+            },
+            onXoa: (value) {
+
+            },
+            typeHome: true,
           );
         },
       ) : ShowThongBao.show("nodata");
