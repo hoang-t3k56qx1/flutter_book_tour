@@ -162,7 +162,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                   SnackBar(
                     content: const Text('Thanh toán thành công'),
                     backgroundColor: Colors.lightBlue, // Đặt màu nền thành màu xanh
-                    duration: const Duration(seconds: 3),
+                    duration: const Duration(seconds: 100),
                     action: SnackBarAction(
                       label: 'Đóng',
                       onPressed: () {
