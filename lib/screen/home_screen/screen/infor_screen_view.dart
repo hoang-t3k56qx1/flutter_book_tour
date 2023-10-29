@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../login_screen/login_screen_view.dart';
 import 'infor_screen.dart';
 
 class PersonalInfoScreenView extends StatelessWidget {
-  const PersonalInfoScreenView({required this.user, super.key, });
+  const PersonalInfoScreenView(
+      {required this.user, super.key, required this.checkLogin,});
+
   final User user;
+  final bool checkLogin;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return checkLogin ? Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -23,7 +27,14 @@ class PersonalInfoScreenView extends StatelessWidget {
             child: const Text('Đăng xuất'),
           ),
         ]
-    );
+    ) : Center(child: ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const LoginScreenView(),
+        ));
+      },
+      child: const Text('Đăng nhập'),
+    ),);
   }
 
   void showLogoutDialog(BuildContext context) {
@@ -41,7 +52,9 @@ class PersonalInfoScreenView extends StatelessWidget {
               child: const Text('Hủy'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                final sharedPreferences = await SharedPreferences.getInstance();
+                sharedPreferences.setBool("checkLogin", false);
                 Navigator.of(context).pop();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => LoginScreenView(),

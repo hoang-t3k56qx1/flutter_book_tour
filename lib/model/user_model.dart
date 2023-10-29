@@ -7,33 +7,33 @@ class User {
   final String avt;
 
   User({
-    required this.uid,
-    required this.username,
-    required this.password,
-    required this.name,
-    required this.email,
-    required this.avt,
+    this.uid = 0,
+    this.username = "",
+    this.password = "",
+    this.name = "",
+    this.email = "",
+    this.avt = "",
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      uid: json['uid'],
-      username: json['username'],
-      password: json['password'],
-      name: json['name'],
-      email: json['email'],
-      avt: json['avt'],
+      uid: json['uid'] ?? 0,
+      username: json['username'] ?? "",
+      password: json['password'] ?? "",
+      name: json['name'] ?? "",
+      email: json['email'] ?? "",
+      avt: json['avt'] ?? "",
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'uid': uid,
-      'username': username,
-      'password': password,
-      'name': name,
-      'email': email,
-      'avt': avt,
+      'uid': uid ?? 0,
+      'username': username ?? "",
+      'password': password ?? "",
+      'name': name ?? "",
+      'email': email ?? "",
+      'avt': avt ?? "",
     };
   }
 }
