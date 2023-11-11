@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/user_model.dart';
 import 'package:flutter_book_tour/screen/admin_screen/admin_screen.dart';
-import 'package:flutter_book_tour/screen/home_screen/screen/home_view.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'infor_screen_view.dart';
+import '../../../provider/tour_provider.dart';
+import 'booked/dondat_by_user_screen.dart';
+import 'home_view.dart';
+import 'info/infor_screen_view.dart';
 
 
 
@@ -25,7 +28,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
 
   late User user = User(
-      uid: 1,
+      uid: 0,
       username: "admin",
       password: "123",
       name: "Lê Huy Hoàng",
@@ -38,12 +41,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        loadUser();
-      });
-    });
-
+    loadUser();
   }
 
   Future<void> loadUser() async {
@@ -59,6 +57,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         print(e);
       }
     }
+    setState(() {
+
+    });
   }
 
 
@@ -91,10 +92,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
            const HomeView(),
 
           (user.username == "admin" && checkLogin) ?
-          AdminScreenView() : const Center(
-            child: Text('Page 2'),
-          ),
-
+          AdminScreenView() : DonDatByUser(user: user,),
           // AdminScreenView(),
 
           PersonalInfoScreenView(user: user, checkLogin: checkLogin,),
@@ -137,8 +135,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   @override
   void dispose() {
     _pageController.dispose();
-    sharedPreferences!.remove('user');
-    sharedPreferences!.remove('checkLogin');
+    // sharedPreferences!.remove('user');
+    // sharedPreferences!.remove('checkLogin');
     super.dispose();
   }
 

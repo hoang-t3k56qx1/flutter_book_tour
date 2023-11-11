@@ -1,47 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/provider/tour_provider.dart';
-import 'package:flutter_book_tour/screen/home_screen/screen/tin_tuc_view.dart';
-import 'package:flutter_book_tour/screen/home_screen/screen/tour_detal_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-
 import '../../../assets_manager.dart';
 import '../../../model/tour_model.dart';
 import '../../notifi_screen/notifi_screen.dart';
-import 'book_tour_screen.dart';
-import 'item_tour_view.dart';
+import 'home/book_tour_screen.dart';
+import 'home/item_tour_view.dart';
+import 'home/tin_tuc_view.dart';
+import 'home/tour_detal_screen.dart';
 
-
-class HomeView extends StatefulWidget{
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
-
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin {
   TextEditingController textEditingController = TextEditingController();
   List<Tour> listTour = [];
+
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      dataTour();
-       // setState(() {
-       //   dataTour();
-       // });
-    });
+    dataTour();
   }
 
   Future<void> dataTour() async {
     await context.read<TourProvide>().listTour();
+    setState(() {
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     double screenWidth = MediaQuery.of(context).size.width;
+    // dataTour();
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,37 +61,25 @@ class _HomeViewState extends State<HomeView> {
                 decoration: const InputDecoration(
                   labelText: 'Tìm kiếm',
                   border: OutlineInputBorder(
-                      borderRadius : BorderRadius.all(Radius.circular(37))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(37))),
                 ),
                 onChanged: (value) {
                   // tim kiem
-
                 },
               ),
             ),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           const Center(
             child: Text(
-                "TOP TOUR NỔI BẬT",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600
-              ),
+              "TOP TOUR NỔI BẬT",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          const SizedBox(height: 10,),
-          _buildNoiBat(),
-          const SizedBox(height: 10,),
-          const Center(
-            child: Text(
-              "DANH SÁCH TOUR",
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600
-              ),
-            ),
+          const SizedBox(
+            height: 10,
           ),
           // const SizedBox(height: 15,),
           _buidListTour(),
@@ -103,42 +88,60 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buidListTour(){
+  Widget _buidListTour() {
     final state = Provider.of<TourProvide>(context, listen: false).state;
-    if(state.status == ListTourState.loading) {
+    if (state.status == ListTourState.loading) {
       return ShowThongBao.show("loading");
     }
-      if(state.status == ListTourState.success) {
+    if (state.status == ListTourState.success) {
       listTour = state.tours;
-      return (listTour.isNotEmpty) ?
-      ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: listTour.length,
-        itemBuilder: (context, index) {
-          Tour tour = listTour[index];
-          return ItemTourView(
-            tour: tour,
-            onDatTour: (tour) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>  BookTourScreen(tour: tour,),
-              ));
-            },
-            onChiTiet: (tour) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>  TourDetalScreen(tour: tour,),
-              ));
-            },
-            onCapNhap: (value) {
-
-            },
-            onXoa: (value) {
-
-            },
-            typeHome: true,
-          );
-        },
-      ) : ShowThongBao.show("nodata");
+      return (listTour.isNotEmpty)
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                _buildNoiBat(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Center(
+                  child: Text(
+                    "DANH SÁCH TOUR",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: listTour.length,
+                  itemBuilder: (context, index) {
+                    Tour tour = listTour[index];
+                    return ItemTourView(
+                      tour: tour,
+                      onDatTour: (tour) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BookTourScreen(
+                            tour: tour,
+                          ),
+                        ));
+                      },
+                      onChiTiet: (tour) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TourDetalScreen(
+                            tour: tour,
+                          ),
+                        ));
+                      },
+                      onCapNhap: (value) {},
+                      onXoa: (value) {},
+                      typeHome: true,
+                    );
+                  },
+                ),
+              ],
+            )
+          : ShowThongBao.show("nodata");
     }
     if (state.status == ListTourState.failure) {
       return ShowThongBao.show("failure");
@@ -146,42 +149,23 @@ class _HomeViewState extends State<HomeView> {
     return ShowThongBao.show("failure");
   }
 
-  Widget _buildNoiBat(){
-    final state = Provider.of<TourProvide>(context, listen: false).state;
-    if(state.status == ListTourState.loading) {
-      return ShowThongBao.show("loading");
-    }
-    if(state.status == ListTourState.success) {
-      listTour = state.tours;
-      return TinTucView(
-        featuredImages: listTour.isNotEmpty ? listTour.sublist(listTour.length -3) : Tour.listTourNoiBat(),
-        onTap: (Tour tour) {
-          // click tour noi bat
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>  TourDetalScreen(tour: tour,),
-          ));
-        },
-      );
-    }
-    if (state.status == ListTourState.failure) {
-      return TinTucView(
-        featuredImages: listTour.isNotEmpty ? listTour.sublist(0, 3) : Tour.listTourNoiBat(),
-        onTap: (Tour tour) {
-          // click tour noi bat
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>  TourDetalScreen(tour: tour,),
-          ));
-        },
-      );
-    }
+  Widget _buildNoiBat() {
     return TinTucView(
-      featuredImages: listTour.isNotEmpty ? listTour.sublist(0, 3) : Tour.listTourNoiBat(),
+      featuredImages: listTour.isNotEmpty
+          ? listTour.sublist(listTour.length - 3)
+          : Tour.listTourNoiBat(),
       onTap: (Tour tour) {
         // click tour noi bat
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>  TourDetalScreen(tour: tour,),
+          builder: (context) => TourDetalScreen(
+            tour: tour,
+          ),
         ));
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }

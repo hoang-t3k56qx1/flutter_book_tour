@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../model/user_model.dart';
-import '../../../provider/user_provider.dart';
-import '../../notifi_screen/notifi_screen.dart';
+import '../../../../model/user_model.dart';
+import '../../../../provider/user_provider.dart';
+import '../../../notifi_screen/notifi_screen.dart';
 import 'img_tour_detal.dart';
 
 class BookTourScreen extends StatefulWidget {
@@ -220,7 +220,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                     user: user,
                     tour: widget.tour,
                     soLuong: soluong,
-                    ngayDat: DateFormat('dd/MM/yyyy').format(dateNow),
+                    ngayDat: DateFormat('HH:mm:ss dd/MM/yyyy').format(dateNow),
                     ngayBatDau: startDate,
                     ngayKetThuc: endDate,
                     tongTien: (widget.tour.gia * soluong));

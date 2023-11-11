@@ -13,6 +13,10 @@ class DonDatProvide extends ChangeNotifier{
   late DonDatService donDatService = DonDatService();
 
   Status status = Status.initial;
+
+  Status statusDonDatById = Status.initial;
+  List<DonDat> list = [];
+
   Future<void> saveDonDat(DonDat donDat) async {
     status = Status.loading;
     notifyListeners();
@@ -29,6 +33,29 @@ class DonDatProvide extends ChangeNotifier{
     } catch(e) {
       print(e.toString());
       status = Status.failure;
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> listDonDatById(int id) async {
+    statusDonDatById = Status.loading;
+    notifyListeners();
+    try {
+      final response = await donDatService.listDonDatById(id);
+      List jsonData = response.data;
+      if (jsonData != null && jsonData.toString().isNotEmpty) {
+        list = jsonData.map((e) => DonDat.fromJson(e as Map<String, dynamic>)).toList();
+        print(list);
+        statusDonDatById = Status.success;
+        notifyListeners();
+      } else {
+        statusDonDatById = Status.nodata;
+        notifyListeners();
+      }
+    } catch(e) {
+      print(e.toString());
+      statusDonDatById = Status.failure;
       notifyListeners();
     }
   }

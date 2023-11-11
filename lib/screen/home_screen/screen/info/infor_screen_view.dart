@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../login_screen/login_screen_view.dart';
+import '../../../login_screen/login_screen_view.dart';
 import 'infor_screen.dart';
 
 class PersonalInfoScreenView extends StatelessWidget {

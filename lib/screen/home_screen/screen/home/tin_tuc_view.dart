@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/tour_model.dart';
-import 'package:flutter_book_tour/screen/home_screen/screen/tin_tuc_item_view.dart';
+import 'package:flutter_book_tour/screen/home_screen/screen/home/tin_tuc_item_view.dart';
 
-import '../../../assets_manager.dart';
-import '../../../model/tin_tuc_moi_model.dart';
+import '../../../../assets_manager.dart';
+import '../../../../model/tin_tuc_moi_model.dart';
 
 class TinTucView extends StatefulWidget {
   const TinTucView({required this.featuredImages, required this.onTap ,super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/user_model.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../assets_manager.dart';
+import '../../../../assets_manager.dart';
 
 class PersonalInfoScreen extends StatelessWidget {
   const PersonalInfoScreen({super.key, required this.user});

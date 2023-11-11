@@ -41,6 +41,7 @@ class TourProvide extends ChangeNotifier{
   late TourService tourService = TourService();
 
   TourState state = const TourState();
+  TourState stateNoiBat = const TourState();
 
 
   Future<void> listTour() async {
@@ -51,11 +52,31 @@ class TourProvide extends ChangeNotifier{
       if (response.data != null) {
         List<dynamic> list = response.data;
         List<Tour> tours = list.map((e) => Tour.fromJson(e)).toList();
+        print(tours);
         state = state.copyWith(status: ListTourState.success, tours: tours);
       }
     } catch(e) {
       print(e.toString());
       state = state.copyWith(status: ListTourState.failure);
+    }
+    notifyListeners();
+  }
+
+  Future<void> listTourNoiBat() async {
+    stateNoiBat = state.copyWith(status: ListTourState.loading);
+    notifyListeners();
+    try {
+      final response = await tourService.listTour();
+      if (response.data != null) {
+        List<dynamic> list = response.data;
+        List<Tour> tours = list.map((e) => Tour.fromJson(e)).toList();
+        List<Tour> lists = tours.sublist(tours.length - 3);
+
+        stateNoiBat = state.copyWith(status: ListTourState.success, tours: lists);
+      }
+    } catch(e) {
+      print(e.toString());
+      stateNoiBat = state.copyWith(status: ListTourState.failure);
     }
     notifyListeners();
   }

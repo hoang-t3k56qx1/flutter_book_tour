@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import '../../assets_manager.dart';
 import '../../model/tour_model.dart';
 import '../../provider/tour_provider.dart';
-import '../home_screen/screen/book_tour_screen.dart';
+import '../home_screen/screen/home/book_tour_screen.dart';
 import '../home_screen/screen/home_screen_view.dart';
-import '../home_screen/screen/item_tour_view.dart';
-import '../home_screen/screen/tour_detal_screen.dart';
+import '../home_screen/screen/home/item_tour_view.dart';
+import '../home_screen/screen/home/tour_detal_screen.dart';
 import '../logout_screen/logout_screen.dart';
 import '../notifi_screen/notifi_screen.dart';
 
@@ -20,12 +20,13 @@ class AdminScreenView extends StatefulWidget{
   State<AdminScreenView> createState() => _AdminScreenViewState();
 }
 
-class _AdminScreenViewState extends State<AdminScreenView> {
+class _AdminScreenViewState extends State<AdminScreenView> with AutomaticKeepAliveClientMixin {
 
   List<Tour> listTour = [];
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     double screenWidth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
@@ -127,4 +128,8 @@ class _AdminScreenViewState extends State<AdminScreenView> {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

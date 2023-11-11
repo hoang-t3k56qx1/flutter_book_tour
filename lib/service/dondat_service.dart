@@ -14,13 +14,13 @@ class DonDatService {
   DonDatService();
 
   Future<Response> listDonDatById(int id) async {
-    final response = await dio.get("${url}/hoadons/$id");
+    final response = await dio.get("${url}/dondats/$id");
     print("${url}/hoadons/$id");
     return response;
   }
 
   Future<Response> saveDonDat(DonDat donDat) async {
-    final response = await dio.post("${url}/hoadons", data: jsonEncode(donDat));
+    final response = await dio.post("${url}/dondats", data: jsonEncode(donDat));
     print("${url}/hoadons");
     return response;
   }

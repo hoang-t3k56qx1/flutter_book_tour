@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_tour/model/tour_model.dart';
 
-import '../../../model/tin_tuc_moi_model.dart';
+import '../../../../model/tin_tuc_moi_model.dart';
 
 class ItemWithTextOverlay extends StatelessWidget {
   const ItemWithTextOverlay({required this.item, Key? key}) : super(key: key);
