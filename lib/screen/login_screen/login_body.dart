@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_book_tour/provider/user_provide.dart';
+import 'package:flutter_book_tour/provider/user_provider.dart';
 import 'package:flutter_book_tour/screen/notifi_screen/notifi_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

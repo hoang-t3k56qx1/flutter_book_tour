@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../assets_manager.dart';
-import '../../provider/user_provide.dart';
+import '../../provider/user_provider.dart';
 import '../home_screen/screen/home_screen_view.dart';
 import '../logout_screen/logout_screen.dart';
 import 'login_body.dart';

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../assets_manager.dart';
 import '../../model/tour_model.dart';
-import '../../provider/tour_provide.dart';
+import '../../provider/tour_provider.dart';
 import '../home_screen/screen/book_tour_screen.dart';
 import '../home_screen/screen/home_screen_view.dart';
 import '../home_screen/screen/item_tour_view.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_book_tour/provider/tour_provide.dart';
+import 'package:flutter_book_tour/provider/tour_provider.dart';
 import 'package:flutter_book_tour/screen/home_screen/screen/tin_tuc_view.dart';
 import 'package:flutter_book_tour/screen/home_screen/screen/tour_detal_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
