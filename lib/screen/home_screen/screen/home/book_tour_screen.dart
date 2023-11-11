@@ -23,12 +23,13 @@ class BookTourScreen extends StatefulWidget {
 }
 
 class _BookTourScreenState extends State<BookTourScreen> {
-  late int soluong = 5;
+  late int soluong = 1;
   late String startDate = "16/10/2023";
   late String endDate = "18/10/2023";
   late User user = User();
   late bool checkLogin = false;
   SharedPreferences? sharedPreferences;
+  DateTime currentDate = DateTime.now();
 
   Future<void> loadUser() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -36,26 +37,32 @@ class _BookTourScreenState extends State<BookTourScreen> {
     String? jsonUser = sharedPreferences!.getString("user") ?? "{}";
     // final newUser = User.fromJson(jsonDecode(jsonUser!));
     print(checkLogin);
-    if(checkLogin) {
+    if (checkLogin) {
       try {
         user = User.fromJson(jsonDecode(jsonUser));
-      } catch(e) {
+      } catch (e) {
         print(e);
       }
     }
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // Lấy ngày hiện tại
+    // Cộng thêm 1 ngày
+    DateTime tomorrow = currentDate.add(const Duration(days: 1));
+    startDate = DateFormat('dd/MM/yyyy').format(tomorrow);
+    DateTime date = DateFormat("dd/MM/yyyy")
+        .parse(startDate)
+        .add(Duration(days: thoiGianDi(widget.tour.thoiGian)));
+    endDate = DateFormat('dd/MM/yyyy').format(date);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         loadUser();
       });
     });
-
   }
 
   @override
@@ -66,7 +73,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
           title: const Center(child: Text("Đặt tour           ")),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+          padding: const EdgeInsets.only(left: 20, top: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,15 +97,97 @@ class _BookTourScreenState extends State<BookTourScreen> {
               const SizedBox(
                 height: 5,
               ),
-              lineText("Ngày bắt đầu", startDate, context),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Ngày bắt đầu: ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    startDate,
+                    maxLines: 10,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () async {
+                      DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate:
+                              DateFormat("dd/MM/yyyy").parse(startDate),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101));
+                      if (picked != null && picked != DateFormat("dd/MM/yyyy").parse(startDate)) {
+                        setState(() {
+                          startDate = DateFormat('dd/MM/yyyy').format(picked);
+                          DateTime date = DateFormat("dd/MM/yyyy")
+                              .parse(startDate)
+                              .add(Duration(days: thoiGianDi(widget.tour.thoiGian)));
+                          endDate = DateFormat('dd/MM/yyyy').format(date);
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+              // lineText("Ngày bắt đầu", startDate, context),
               const SizedBox(
                 height: 5,
               ),
               lineText("Ngày kết thúc", endDate, context),
-              const SizedBox(
-                height: 5,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Số lương:",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      soluong -= 1;
+                      if (soluong == 0) {
+                        soluong = 1;
+                      }
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    soluong.toString(),
+                    maxLines: 10,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      soluong += 1;
+                      setState(() {});
+                    },
+                  ),
+                ],
               ),
-              lineText("Số lượng", "$soluong", context),
+              // lineText("Số lượng", "$soluong", context),
               const SizedBox(
                 height: 20,
               ),
@@ -251,7 +340,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                 if (state == Status.failure) {
                   ShowThongBao.show("failure");
                 }
-                  ShowThongBao.show("failure");
+                ShowThongBao.show("failure");
               },
               child: const Text('Đặt'),
             ),
@@ -259,5 +348,17 @@ class _BookTourScreenState extends State<BookTourScreen> {
         );
       },
     );
+  }
+
+  int thoiGianDi(String date) {
+    RegExp regExp = RegExp(r'(\d+) ngày');
+    RegExpMatch? match = regExp.firstMatch(date);
+    if (match != null) {
+      String? numberOfDays = match.group(1);
+      int days = int.parse(numberOfDays ?? "0");
+      return days;
+    } else {
+      return 0;
+    }
   }
 }
