@@ -85,15 +85,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
           const SizedBox(height: 10,),
-          TinTucView(
-            featuredImages: Tour.listTourNoiBat(),
-            onTap: (Tour tour) {
-            // click tour noi bat
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>  TourDetalScreen(tour: tour,),
-              ));
-            },
-          ),
+          _buildNoiBat(),
           const SizedBox(height: 10,),
           const Center(
             child: Text(
@@ -112,8 +104,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buidListTour(){
-    final state = Provider.of<TourProvide>(context).state;
-
+    final state = Provider.of<TourProvide>(context, listen: false).state;
     if(state.status == ListTourState.loading) {
       return ShowThongBao.show("loading");
     }
@@ -153,5 +144,44 @@ class _HomeViewState extends State<HomeView> {
       return ShowThongBao.show("failure");
     }
     return ShowThongBao.show("failure");
+  }
+
+  Widget _buildNoiBat(){
+    final state = Provider.of<TourProvide>(context, listen: false).state;
+    if(state.status == ListTourState.loading) {
+      return ShowThongBao.show("loading");
+    }
+    if(state.status == ListTourState.success) {
+      listTour = state.tours;
+      return TinTucView(
+        featuredImages: listTour.isNotEmpty ? listTour.sublist(listTour.length -3) : Tour.listTourNoiBat(),
+        onTap: (Tour tour) {
+          // click tour noi bat
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>  TourDetalScreen(tour: tour,),
+          ));
+        },
+      );
+    }
+    if (state.status == ListTourState.failure) {
+      return TinTucView(
+        featuredImages: listTour.isNotEmpty ? listTour.sublist(0, 3) : Tour.listTourNoiBat(),
+        onTap: (Tour tour) {
+          // click tour noi bat
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>  TourDetalScreen(tour: tour,),
+          ));
+        },
+      );
+    }
+    return TinTucView(
+      featuredImages: listTour.isNotEmpty ? listTour.sublist(0, 3) : Tour.listTourNoiBat(),
+      onTap: (Tour tour) {
+        // click tour noi bat
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>  TourDetalScreen(tour: tour,),
+        ));
+      },
+    );
   }
 }

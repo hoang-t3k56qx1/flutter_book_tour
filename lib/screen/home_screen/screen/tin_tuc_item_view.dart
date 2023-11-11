@@ -19,7 +19,7 @@ class ItemWithTextOverlay extends StatelessWidget {
             alignment: Alignment.center,
             children: <Widget>[
               Image.network(
-                item.imgs[0],
+                item.imgs[item.imgs.length-1],
                 height: 200,
                 width: screenWidth - 60.0,
                 fit: BoxFit.cover,
@@ -50,33 +50,41 @@ class ItemWithTextOverlay extends StatelessWidget {
         ),
         Positioned(
           bottom: 10,
-          left: 10,
+          left: 40,
           right: 10,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Center(
-                child: Text(
-                  item.ten,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Màu của văn bản
-                  ),
-                  overflow: TextOverflow.ellipsis, // Hiển thị ba dấu chấm khi văn bản tràn ra ngoài
-                  maxLines: 2, // Số dòng tối đa để hiển thị
+              Text(
+                "Tour: " + item.ten,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Màu của văn bản
                 ),
+                overflow: TextOverflow.ellipsis, // Hiển thị ba dấu chấm khi văn bản tràn ra ngoài
+                maxLines: 2, // Số dòng tối đa để hiển thị
               ),
-              Center(
-                child: Text(
-                  item.moTa,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white, // Màu của văn bản
-                  ),
-                  overflow: TextOverflow.ellipsis, // Hiển thị ba dấu chấm khi văn bản tràn ra ngoài
-                  maxLines: 3, // Số dòng tối đa để hiển thị
+              SizedBox(height: 10,),
+              Text(
+                'Giá: ${Tour.formatToVietnameseMoney(item.gia)} VNĐ',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Màu của văn bản
                 ),
+                overflow: TextOverflow.ellipsis, // Hiển thị ba dấu chấm khi văn bản tràn ra ngoài
+                maxLines: 2, // Số dòng tối đa để hiển thị
+              ),
+              SizedBox(height: 10,),
+              Text(
+                "Mô tả: "+item.moTa,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.white, // Màu của văn bản
+                ),
+                overflow: TextOverflow.ellipsis, // Hiển thị ba dấu chấm khi văn bản tràn ra ngoài
+                maxLines: 3, // Số dòng tối đa để hiển thị
               ),
             ],
           ),
