@@ -6,11 +6,12 @@ import '../../../../assets_manager.dart';
 
 class PersonalInfoScreen extends StatelessWidget {
   const PersonalInfoScreen({super.key, required this.user});
+
   final User user;
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircleAvatar(
@@ -18,20 +19,21 @@ class PersonalInfoScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           child: ClipOval(
             child: Image.network(
-              user.avt,
+              (user.username == 'admin')
+                  ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt6C5if4pCpIkPgrDk3eFzHsL2dl9S2SlS5Q&usqp=CAU"
+                  : user.avt,
               width: 160.0,
               height: 160.0,
               fit: BoxFit.cover,
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
                 return const CircularProgressIndicator();
               },
               errorBuilder: (context, error, stackTrace) {
-                return SvgPicture.asset(
-                    ImageAssets.avatar
-                );
+                return SvgPicture.asset(ImageAssets.avatar);
               },
             ),
           ),
@@ -47,10 +49,7 @@ class PersonalInfoScreen extends StatelessWidget {
         const SizedBox(height: 8.0),
         Text(
           user.email,
-          style: const TextStyle(
-            fontSize: 18.0,
-              fontWeight: FontWeight.bold
-          ),
+          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
       ],
     );
