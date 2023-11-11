@@ -17,9 +17,9 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin {
+class _HomeViewState extends State<HomeView>
+    with AutomaticKeepAliveClientMixin {
   TextEditingController textEditingController = TextEditingController();
-  List<Tour> listTour = [];
 
   @override
   void initState() {
@@ -28,10 +28,12 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
   }
 
   Future<void> dataTour() async {
-    await context.read<TourProvide>().listTour();
-    setState(() {
-
-    });
+    final provider = context.read<TourProvide>();
+    if(provider.stateNoiBat.tours.isEmpty){
+      await provider.listTourNoiBat();
+    }
+    await provider.listTour(textEditingController.text.trim() ?? "");
+    setState(() {});
   }
 
   @override
@@ -63,8 +65,14 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(37))),
                 ),
-                onChanged: (value) {
+                onChanged: (value) async {
                   // tim kiem
+                  print(value);
+                  final provider = context.read<TourProvide>();
+                  await provider.listTour(value.trim() ?? "");
+                  setState(() {
+
+                  });
                 },
               ),
             ),
@@ -81,6 +89,16 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
           const SizedBox(
             height: 10,
           ),
+          _buildNoiBat(),
+          const SizedBox(
+            height: 10,
+          ),
+          const Center(
+            child: Text(
+              "DANH SÁCH TOUR",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
           // const SizedBox(height: 15,),
           _buidListTour(),
         ],
@@ -94,6 +112,7 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
       return ShowThongBao.show("loading");
     }
     if (state.status == ListTourState.success) {
+      List<Tour> listTour = [];
       listTour = state.tours;
       return (listTour.isNotEmpty)
           ? Column(
@@ -101,16 +120,6 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                _buildNoiBat(),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Center(
-                  child: Text(
-                    "DANH SÁCH TOUR",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -150,10 +159,34 @@ class _HomeViewState extends State<HomeView> with AutomaticKeepAliveClientMixin 
   }
 
   Widget _buildNoiBat() {
+    final state = Provider.of<TourProvide>(context, listen: false).stateNoiBat;
+    if (state.status == ListTourState.loading) {
+      return ShowThongBao.show("loading");
+    }
+    if (state.status == ListTourState.success) {
+      List<Tour> listTourNoiBat = [];
+      listTourNoiBat = state.tours;
+      return (listTourNoiBat.isNotEmpty)
+          ? TinTucView(
+              featuredImages: listTourNoiBat.isNotEmpty
+                  ? listTourNoiBat.sublist(listTourNoiBat.length - 3)
+                  : Tour.listTourNoiBat(),
+              onTap: (Tour tour) {
+                // click tour noi bat
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TourDetalScreen(
+                    tour: tour,
+                  ),
+                ));
+              },
+            )
+          : ShowThongBao.show("nodata");
+    }
+    if (state.status == ListTourState.failure) {
+      return ShowThongBao.show("failure");
+    }
     return TinTucView(
-      featuredImages: listTour.isNotEmpty
-          ? listTour.sublist(listTour.length - 3)
-          : Tour.listTourNoiBat(),
+      featuredImages: Tour.listTourNoiBat(),
       onTap: (Tour tour) {
         // click tour noi bat
         Navigator.of(context).push(MaterialPageRoute(
