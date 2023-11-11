@@ -89,7 +89,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'THANH TOÁN',
+                        'ĐẶT TOUR',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -145,8 +145,8 @@ class _BookTourScreenState extends State<BookTourScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Xác Nhận Thanh Toán'),
-          content:  Text('Tổng số tiền bạn cần thanh toán cho tour là: '
+          title: const Text('Xác Nhận Đặt tour'),
+          content:  Text('Tổng số tiền bạn cần thanh toán cho tour khi đến nơi nhận là: '
               '${Tour.formatToVietnameseMoney(widget.tour.gia*soluong)} VNĐ'),
           actions: <Widget>[
             TextButton(
@@ -160,9 +160,9 @@ class _BookTourScreenState extends State<BookTourScreen> {
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text('Thanh toán thành công'),
+                    content: const Text('Đặt tour thành công'),
                     backgroundColor: Colors.lightBlue, // Đặt màu nền thành màu xanh
-                    duration: const Duration(seconds: 100),
+                    duration: const Duration(seconds: 3),
                     action: SnackBarAction(
                       label: 'Đóng',
                       onPressed: () {
@@ -173,7 +173,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                 );
                 Navigator.of(context).pop();
               },
-              child: const Text('Thanh toán'),
+              child: const Text('Đặt'),
             ),
           ],
         );

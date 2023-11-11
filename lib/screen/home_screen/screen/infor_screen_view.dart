@@ -14,6 +14,7 @@ class PersonalInfoScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("hoangdev ${user.avt}");
     return checkLogin ? Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
