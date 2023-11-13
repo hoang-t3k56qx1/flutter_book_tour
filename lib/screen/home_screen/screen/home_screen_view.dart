@@ -27,14 +27,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   SharedPreferences? sharedPreferences;
 
 
-  late User user = User(
-      uid: 0,
-      username: "admin",
-      password: "123",
-      name: "Lê Huy Hoàng",
-      email: "lehuyhoangt3@gmail.com",
-      avt: "https://scontent.fhan20-1.fna.fbcdn.net/v/t1.15752-9/393465944_291669270480464_6561957402276023511_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=Oy7jtwMOPToAX8hpXRo&_nc_ht=scontent.fhan20-1.fna&oh=03_AdTBOYWBWzKeV280Belcf7fw0tPH49stdASSkgRCvNCdAg&oe=6554A889"
-  );
+  late User user = User();
 
 
   @override
