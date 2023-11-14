@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 
+import '../model/tour_model.dart';
 import '../setting_manager.dart';
 import 'dio_singleton.dart';
 
@@ -26,6 +29,18 @@ class TourService {
   Future<Response> deleteTour(int  id) async {
     final response = await dio.delete("${url}/tours/$id");
     print("${url}/tours/name/$id");
+    return response;
+  }
+
+  Future<Response> createTour(Tour  tour) async {
+    final response = await dio.post("${url}/tours", data: jsonEncode(tour));
+    print("${url}/tours");
+    return response;
+  }
+
+  Future<Response> updateTour(Tour  tour) async {
+    final response = await dio.put("${url}/tours", data: jsonEncode(tour));
+    print("${url}/tours");
     return response;
   }
 }

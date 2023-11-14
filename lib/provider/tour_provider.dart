@@ -46,6 +46,10 @@ class TourProvide extends ChangeNotifier{
 
   TourState stateDelete = const TourState();
 
+  TourState stateCreate = const TourState();
+
+  TourState stateUpdate = const TourState();
+
 
   Future<void> listTour(String key) async {
     state = state.copyWith(status: ListTourState.loading);
@@ -106,6 +110,36 @@ class TourProvide extends ChangeNotifier{
       stateDelete = state.copyWith(status: ListTourState.failure);
       notifyListeners();
     }
+  }
+
+  Future<void> createTour(Tour tour) async {
+    stateCreate = state.copyWith(status: ListTourState.loading);
+    notifyListeners();
+    try {
+      final response = await tourService.createTour(tour);
+      if (response.data != null) {
+        stateCreate = state.copyWith(status: ListTourState.success);
+      }
+    } catch(e) {
+      print(e.toString());
+      stateCreate = state.copyWith(status: ListTourState.failure);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateTour(Tour tour) async {
+    stateUpdate = state.copyWith(status: ListTourState.loading);
+    notifyListeners();
+    try {
+      final response = await tourService.updateTour(tour);
+      if (response.data != null) {
+        stateUpdate = state.copyWith(status: ListTourState.success);
+      }
+    } catch(e) {
+      print(e.toString());
+      stateUpdate = state.copyWith(status: ListTourState.failure);
+    }
+    notifyListeners();
   }
 
 }
