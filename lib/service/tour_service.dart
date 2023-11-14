@@ -22,4 +22,10 @@ class TourService {
     print("${url}/tours/name");
     return response;
   }
+
+  Future<Response> deleteTour(int  id) async {
+    final response = await dio.delete("${url}/tours/$id");
+    print("${url}/tours/name/$id");
+    return response;
+  }
 }

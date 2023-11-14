@@ -13,20 +13,26 @@ import '../home_screen/screen/home/tour_detal_screen.dart';
 import '../logout_screen/logout_screen.dart';
 import '../notifi_screen/notifi_screen.dart';
 
-class AdminScreenView extends StatefulWidget{
+class AdminScreenView extends StatefulWidget {
   const AdminScreenView({super.key});
 
   @override
   State<AdminScreenView> createState() => _AdminScreenViewState();
 }
 
-class _AdminScreenViewState extends State<AdminScreenView> with AutomaticKeepAliveClientMixin {
-
+class _AdminScreenViewState extends State<AdminScreenView> {
   List<Tour> listTour = [];
+
+  Future<void> data() async {
+    final provider = context.read<TourProvide>();
+    await provider.listTour("");
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     double screenWidth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
@@ -34,67 +40,77 @@ class _AdminScreenViewState extends State<AdminScreenView> with AutomaticKeepAli
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Center(
             child: ElevatedButton(
-                onPressed: () {
-
-                },
-                child: const Text(
-                  "Thêm mới tour"
-                ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const UpdateTourScreen(
+                    tour: null,
+                    type: "CREATE",
+                  ),
+                ));
+              },
+              child: const Text("Thêm mới tour"),
             ),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           const Center(
             child: Text(
               "DANH SÁCH TOUR",
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           _buidListTour(),
         ],
       ),
     );
   }
 
-  Widget _buidListTour(){
-    final state = Provider.of<TourProvide>(context).state;
+  Widget _buidListTour() {
+    final provider = Provider.of<TourProvide>(context, listen: false);
+    final state = provider.state;
 
-    if(state.status == ListTourState.loading) {
+    if (state.status == ListTourState.loading) {
       return ShowThongBao.show("loading");
     }
-    if(state.status == ListTourState.success) {
+    if (state.status == ListTourState.success) {
       listTour = state.tours;
-      return (listTour.isNotEmpty) ?
-      ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: listTour.length,
-        itemBuilder: (context, index) {
-          Tour tour = listTour[index];
-          return ItemTourView(
-            tour: tour,
-            onDatTour: (tour) {
-            },
-            onChiTiet: (tour) {
-            },
-            onCapNhap: (tour) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>  UpdateTourScreen(tour: tour,),
-              ));
-            },
-            onXoa: (tour) {
-              showLogoutDialog(context, tour);
-            },
-            typeHome: false,
-          );
-        },
-      ) : ShowThongBao.show("nodata");
+      listTour = listTour.reversed.toList();
+      return (listTour.isNotEmpty)
+          ? ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: listTour.length,
+              itemBuilder: (context, index) {
+                Tour tour = listTour[index];
+                return ItemTourView(
+                  tour: tour,
+                  onDatTour: (tour) {},
+                  onChiTiet: (tour) {},
+                  onCapNhap: (tour) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => UpdateTourScreen(
+                        tour: tour,
+                        type: "UPDATE",
+                      ),
+                    ));
+                  },
+                  onXoa: (tour) {
+                    showLogoutDialog(context, tour);
+                  },
+                  typeHome: false,
+                );
+              },
+            )
+          : ShowThongBao.show("nodata");
     }
     if (state.status == ListTourState.failure) {
       return ShowThongBao.show("failure");
@@ -117,9 +133,52 @@ class _AdminScreenViewState extends State<AdminScreenView> with AutomaticKeepAli
               child: const Text('Hủy'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                final provider =
+                    Provider.of<TourProvide>(context, listen: false);
+                await provider.deleteTour(item.id);
+                final stateDelete = provider.stateDelete;
+
+                if (stateDelete.status == ListTourState.loading) {
+                  ShowThongBao.show("loading");
+                }
+                if (stateDelete.status == ListTourState.success) {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Xóa tour thành công!'),
+                      backgroundColor: Colors.lightBlue,
+                      // Đặt màu nền thành màu xanh
+                      duration: const Duration(seconds: 5),
+                      action: SnackBarAction(
+                        label: 'Đóng',
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                      ),
+                    ),
+                  );
+                }
+                if (stateDelete.status == ListTourState.failure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Tour không thể xóa vì đã lưu trữ đơn đặt!'),
+                      backgroundColor: Colors.red,
+                      // Đặt màu nền thành màu xanh
+                      duration: const Duration(seconds: 5),
+                      action: SnackBarAction(
+                        label: 'Đóng',
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                      ),
+                    ),
+                  );
+                }
+                Navigator.pop(context);
+                data();
                 // call api xóa và tải lại dữ liệu
-                Navigator.of(context).pop();
+
               },
               child: const Text('Xóa'),
             ),
@@ -129,7 +188,33 @@ class _AdminScreenViewState extends State<AdminScreenView> with AutomaticKeepAli
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  void showNotifi(BuildContext context, String mess) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Center(
+              child: Text(
+            'Thông báo',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          )),
+          content: Text(
+            mess,
+            style: const TextStyle(color: Colors.red),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // call api xóa và tải lại dữ liệu
+                Navigator.of(context).pop();
+              },
+              child: const Center(child: Text('Đóng')),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

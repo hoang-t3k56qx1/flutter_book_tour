@@ -41,7 +41,10 @@ class TourProvide extends ChangeNotifier{
   late TourService tourService = TourService();
 
   TourState state = const TourState();
+
   TourState stateNoiBat = const TourState();
+
+  TourState stateDelete = const TourState();
 
 
   Future<void> listTour(String key) async {
@@ -65,6 +68,7 @@ class TourProvide extends ChangeNotifier{
   Future<void> listTourNoiBat() async {
     if (stateNoiBat.tours.isNotEmpty) {
       stateNoiBat = state.copyWith(status: ListTourState.success);
+      notifyListeners();
     }
     stateNoiBat = state.copyWith(status: ListTourState.loading);
     notifyListeners();
@@ -82,6 +86,26 @@ class TourProvide extends ChangeNotifier{
       stateNoiBat = state.copyWith(status: ListTourState.failure);
     }
     notifyListeners();
+  }
+
+  Future<void> deleteTour(int id) async {
+    stateDelete = state.copyWith(status: ListTourState.loading);
+    try {
+      final response = await tourService.deleteTour(id);
+      print(response.data);
+      if (response.data == "Xóa thành công"){
+        stateDelete = state.copyWith(status: ListTourState.success);
+        notifyListeners();
+      } else {
+        stateDelete = state.copyWith(status: ListTourState.failure);
+        notifyListeners();
+      }
+
+    } catch(e) {
+      print(e.toString());
+      stateDelete = state.copyWith(status: ListTourState.failure);
+      notifyListeners();
+    }
   }
 
 }
