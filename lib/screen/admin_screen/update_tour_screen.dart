@@ -6,6 +6,7 @@ import 'package:flutter_book_tour/model/tour_model.dart';
 import 'package:flutter_book_tour/screen/admin_screen/text_area_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/diadanh_provide.dart';
 import '../../provider/tour_provider.dart';
 import '../../provider/user_provider.dart';
 import '../notifi_screen/notifi_screen.dart';
@@ -30,10 +31,14 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   final _diaDiemController = TextEditingController();
   final _giaController = TextEditingController();
   late String title = "";
-  late String diaDiem = "";
+  late String diaDiem = "Thanh Hóa";
+  List<String> listDiaDanh = [];
+  List<DiaDanh> list = [];
+  int idDiaDanh = 1;
 
   @override
   void initState() {
+    list =  context.read<DiaDanhProvide>().list;
     type = widget.type;
     _tenController.text = (type == "UPDATE") ? widget.tour!.ten : "";
     _moTaController.text = (type == "UPDATE") ? widget.tour!.moTa : "";
@@ -52,7 +57,18 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     } else {
       title = "Thêm mới tour";
     }
-    diaDiem = "Thanh Hóa";
+    list.forEach((element) {
+      listDiaDanh.add(element.ten);
+    });
+    if (type == "UPDATE") {
+      int index = list.indexWhere((element) => element.id == widget.tour?.diaDanh.id);
+      if (index != -1) {
+        diaDiem = widget.tour?.diaDanh.ten ?? '';
+        idDiaDanh = list[index].id;
+      }
+    } else {
+      diaDiem = "Thanh Hóa";
+    }
   }
 
   Future<void> data() async {
@@ -357,9 +373,14 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                               // Xử lý khi một mục được chọn
                              setState(() {
                                diaDiem = newValue ?? diaDiem;
+                               int index = list.indexWhere((element) => element.ten == diaDiem);
+                               if (index != -1) {
+                                 idDiaDanh = list[index].id;
+                                 _diaDiemController.text = list[index].moTa;
+                               }
                              });
                             },
-                            items: ['Thanh Hóa', 'Hà Nội', 'Sài Gòn', 'Nha Trang']
+                            items: listDiaDanh
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -515,7 +536,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                     moTa: _moTaController.text,
                     gia: double.parse(_giaController.text),
                     thoiGian: _thoiGianController.text,
-                    diaDanh: DiaDanh(id: 1, ten: "ten", moTa: "moTa"),
+                    diaDanh: DiaDanh(id: idDiaDanh, ten: "ten", moTa: "moTa"),
                     lichTrinh: _lichTrinhController.text,
                     imgs: listStringHinhAnh);
 

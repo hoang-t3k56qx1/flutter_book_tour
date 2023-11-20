@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/provider/diadanh_provide.dart';
 import 'package:flutter_book_tour/provider/tour_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class _HomeViewState extends State<HomeView>
   void initState() {
     super.initState();
     dataTour();
+    dataDiaDanh();
   }
 
   Future<void> dataTour() async {
@@ -34,6 +36,11 @@ class _HomeViewState extends State<HomeView>
     }
     await provider.listTour(textEditingController.text.trim() ?? "");
     setState(() {});
+  }
+
+  Future<void> dataDiaDanh() async {
+    final provider = context.read<DiaDanhProvide>();
+    await provider.allDiaDanh();
   }
 
   @override

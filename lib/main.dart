@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/provider/diadanh_provide.dart';
 import 'package:flutter_book_tour/provider/dondat_provider.dart';
 import 'package:flutter_book_tour/provider/tour_provider.dart';
 import 'package:flutter_book_tour/provider/user_provider.dart';
@@ -14,6 +15,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => TourProvide()),
         ChangeNotifierProvider(create: (context) => UserProvide()),
         ChangeNotifierProvider(create: (context) => DonDatProvide()),
+        ChangeNotifierProvider(create: (context) => DiaDanhProvide()),
         // Thêm các Provider khác nếu cần
       ],
       child: const MyApp(),
