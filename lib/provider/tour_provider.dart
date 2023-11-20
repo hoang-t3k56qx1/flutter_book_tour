@@ -119,6 +119,8 @@ class TourProvide extends ChangeNotifier{
       final response = await tourService.createTour(tour);
       if (response.data != null) {
         stateCreate = state.copyWith(status: ListTourState.success);
+      } else {
+        stateCreate = state.copyWith(status: ListTourState.failure);
       }
     } catch(e) {
       print(e.toString());
@@ -134,6 +136,8 @@ class TourProvide extends ChangeNotifier{
       final response = await tourService.updateTour(tour);
       if (response.data != null) {
         stateUpdate = state.copyWith(status: ListTourState.success);
+      } else {
+        stateUpdate = state.copyWith(status: ListTourState.failure);
       }
     } catch(e) {
       print(e.toString());

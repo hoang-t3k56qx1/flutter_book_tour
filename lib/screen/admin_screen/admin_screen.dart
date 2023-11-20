@@ -24,10 +24,10 @@ class _AdminScreenViewState extends State<AdminScreenView> {
   List<Tour> listTour = [];
 
   Future<void> data() async {
+    print("uploadData");
     final provider = context.read<TourProvide>();
     await provider.listTour("");
     setState(() {
-
     });
   }
 
@@ -45,13 +45,14 @@ class _AdminScreenViewState extends State<AdminScreenView> {
           ),
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
+              onPressed: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const UpdateTourScreen(
                     tour: null,
                     type: "CREATE",
                   ),
                 ));
+                await data();
               },
               child: const Text("Thêm mới tour"),
             ),
@@ -95,13 +96,14 @@ class _AdminScreenViewState extends State<AdminScreenView> {
                   tour: tour,
                   onDatTour: (tour) {},
                   onChiTiet: (tour) {},
-                  onCapNhap: (tour) {
-                    Navigator.of(context).push(MaterialPageRoute(
+                  onCapNhap: (tour) async {
+                    await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => UpdateTourScreen(
                         tour: tour,
                         type: "UPDATE",
                       ),
                     ));
+                    await data();
                   },
                   onXoa: (tour) {
                     showLogoutDialog(context, tour);

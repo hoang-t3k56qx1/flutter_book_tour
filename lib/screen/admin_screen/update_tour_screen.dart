@@ -1,6 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_book_tour/model/diadanh_model.dart';
 import 'package:flutter_book_tour/model/tour_model.dart';
 import 'package:flutter_book_tour/screen/admin_screen/text_area_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/tour_provider.dart';
+import '../../provider/user_provider.dart';
+import '../notifi_screen/notifi_screen.dart';
 
 class UpdateTourScreen extends StatefulWidget {
   const UpdateTourScreen({super.key, required this.tour, required this.type});
@@ -22,29 +30,34 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   final _diaDiemController = TextEditingController();
   final _giaController = TextEditingController();
   late String title = "";
+  late String diaDiem = "";
 
   @override
   void initState() {
     type = widget.type;
-    _tenController.text = (type == "UPDATE") ? widget.tour!.ten : "Nhập tên";
-    _moTaController.text = (type == "UPDATE") ? widget.tour!.moTa : "Nhập mô tả";
-    _thoiGianController.text =
-        (type == "UPDATE") ? widget.tour!.thoiGian : "Nhập thời gian";
+    _tenController.text = (type == "UPDATE") ? widget.tour!.ten : "";
+    _moTaController.text = (type == "UPDATE") ? widget.tour!.moTa : "";
+    _thoiGianController.text = (type == "UPDATE") ? widget.tour!.thoiGian : "";
     _lichTrinhController.text =
-        (type == "UPDATE") ? widget.tour!.lichTrinh : "Nhập lịch trình";
+        (type == "UPDATE") ? widget.tour!.lichTrinh : "";
     _hinhAnhController.text =
-        (type == "UPDATE") ? widget.tour!.imgs.join(",") : "Nhập link hình ảnh";
+        (type == "UPDATE") ? widget.tour!.imgs.join(",") : "";
     _diaDiemController.text = (type == "UPDATE")
-        ? "${widget.tour!.diaDanh.ten} - ${widget.tour!.diaDanh.moTa}"
-        : "Chọn địa điểm";
-    _giaController.text = (type == "UPDATE")
-        ? "${Tour.formatToVietnameseMoney(widget.tour!.gia)} VNĐ"
-        : "Nhập giá";
+        ? widget.tour!.diaDanh.moTa
+        : "";
+    _giaController.text =
+        (type == "UPDATE") ? widget.tour!.gia.toString() : "0";
     if (type == "UPDATE") {
       title = "Cập nhập tour";
     } else {
       title = "Thêm mới tour";
     }
+    diaDiem = "Thanh Hóa";
+  }
+
+  Future<void> data() async {
+    final provider = context.read<TourProvide>();
+    await provider.listTour("");
   }
 
   @override
@@ -315,7 +328,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -326,21 +339,37 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 148,
-                        child: Text(
-                          _diaDiemController.text,
-                          maxLines: 10,
-                          softWrap: true,
-                          // Mặc định là true, nhưng nếu bạn muốn chắc chắn, hãy thiết lập nó ở đây.
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width - 150,
+                            child: Text(
+                              _diaDiemController.text,
+                              maxLines: 10,
+                              softWrap: true,
+                              // Mặc định là true, nhưng nếu bạn muốn chắc chắn, hãy thiết lập nó ở đây.
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: diaDiem,
+                            onChanged: (String? newValue) {
+                              // Xử lý khi một mục được chọn
+                             setState(() {
+                               diaDiem = newValue ?? diaDiem;
+                             });
+                            },
+                            items: ['Thanh Hóa', 'Hà Nội', 'Sài Gòn', 'Nha Trang']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {},
                   ),
                 ],
               ),
@@ -365,7 +394,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                       Container(
                         width: MediaQuery.of(context).size.width - 125,
                         child: Text(
-                          _giaController.text,
+                          '${Tour.formatToVietnameseMoney(double.parse(_giaController.text))} VNĐ',
                           maxLines: 10,
                           softWrap: true,
                           // Mặc định là true, nhưng nếu bạn muốn chắc chắn, hãy thiết lập nó ở đây.
@@ -395,7 +424,12 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               ),
               InkWell(
                 onTap: () {
-                  showLogoutDialog(context);
+                  String vadidate = validate();
+                  if (vadidate.isNotEmpty) {
+                    showNotifi(context, vadidate);
+                  } else {
+                    showLogoutDialog(context);
+                  }
                 },
                 child: Center(
                   child: Container(
@@ -435,6 +469,26 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     );
   }
 
+  String validate() {
+    String vali = "";
+    if (_tenController.text.isEmpty) {
+      vali += " \nKhông được để trống tên tour";
+    }
+    if (_moTaController.text.isEmpty) {
+      vali += " \nKhông được để trống mô tả tour";
+    }
+    if (_thoiGianController.text.isEmpty) {
+      vali += " \nKhông được để trống thời gian tour";
+    }
+    if (_lichTrinhController.text.isEmpty) {
+      vali += " \nKhông được để trống lịch trình tour";
+    }
+    if (_giaController.text.isEmpty) {
+      vali += " \nKhông được để trống gia tour";
+    }
+    return vali.trim();
+  }
+
   void showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -452,11 +506,89 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               child: const Text('Hủy'),
             ),
             TextButton(
-              onPressed: () {
-                // call api cập nhập  và tải lại dữ liệu
-                Navigator.of(context).pop();
+              onPressed: () async {
+                List<String> listStringHinhAnh =
+                    _hinhAnhController.text.split(',');
+                Tour tour = Tour(
+                    id: widget.tour?.id ?? 0,
+                    ten: _tenController.text,
+                    moTa: _moTaController.text,
+                    gia: double.parse(_giaController.text),
+                    thoiGian: _thoiGianController.text,
+                    diaDanh: DiaDanh(id: 1, ten: "ten", moTa: "moTa"),
+                    lichTrinh: _lichTrinhController.text,
+                    imgs: listStringHinhAnh);
+
+                final provider = context.read<TourProvide>();
+                if (type == "UPDATE") {
+                  await provider.updateTour(tour);
+                } else {
+                  await provider.createTour(tour);
+                }
+                final state = (type == "UPDATE")
+                    // ignore: use_build_context_synchronously
+                    ? context.read<TourProvide>().stateUpdate
+                    // ignore: use_build_context_synchronously
+                    : context.read<TourProvide>().stateCreate;
+                if (state.status == ListTourState.loading) {
+                  ShowThongBao.show("loading");
+                }
+                if (state.status == ListTourState.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text((type == "UPDATE")
+                          ? 'Cập nhập tour thành công!'
+                          : 'Thêm mới tour thanh công!'),
+                      backgroundColor: Colors.lightBlue,
+                      // Đặt màu nền thành màu xanh
+                      duration: const Duration(seconds: 3),
+                      action: SnackBarAction(
+                        label: 'Đóng',
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                      ),
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                  // await data();
+                }
+                if (state.status == ListTourState.failure) {
+                  ShowThongBao.show("failure");
+                }
+                ShowThongBao.show("failure");
               },
               child: Text((type == "UPDATE") ? 'Cập nhập' : 'Thêm mới'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showNotifi(BuildContext context, String mess) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Center(
+              child: Text(
+            'Thông báo',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          )),
+          content: Text(
+            mess,
+            style: const TextStyle(color: Colors.red),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // call api xóa và tải lại dữ liệu
+                Navigator.of(context).pop();
+              },
+              child: const Center(child: Text('Đóng')),
             ),
           ],
         );
