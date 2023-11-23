@@ -70,10 +70,10 @@ class TourProvide extends ChangeNotifier{
   }
 
   Future<void> listTourNoiBat() async {
-    if (stateNoiBat.tours.isNotEmpty) {
-      stateNoiBat = state.copyWith(status: ListTourState.success);
-      notifyListeners();
-    }
+    // if (stateNoiBat.tours.isNotEmpty) {
+    //   stateNoiBat = state.copyWith(status: ListTourState.success);
+    //   notifyListeners();
+    // }
     stateNoiBat = state.copyWith(status: ListTourState.loading);
     notifyListeners();
     try {
@@ -82,7 +82,7 @@ class TourProvide extends ChangeNotifier{
         List<dynamic> list = response.data;
         List<Tour> tours = list.map((e) => Tour.fromJson(e)).toList();
         List<Tour> lists = tours.sublist(tours.length - 3);
-
+        lists = lists.reversed.toList();
         stateNoiBat = state.copyWith(status: ListTourState.success, tours: lists);
       }
     } catch(e) {

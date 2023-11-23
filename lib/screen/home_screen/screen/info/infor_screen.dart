@@ -21,7 +21,7 @@ class PersonalInfoScreen extends StatelessWidget {
             child: Image.network(
               (user.username == 'admin')
                   ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt6C5if4pCpIkPgrDk3eFzHsL2dl9S2SlS5Q&usqp=CAU"
-                  : "https://scontent.fhan20-1.fna.fbcdn.net/v/t1.15752-9/393465944_291669270480464_6561957402276023511_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=Oy7jtwMOPToAX8hpXRo&_nc_ht=scontent.fhan20-1.fna&oh=03_AdTBOYWBWzKeV280Belcf7fw0tPH49stdASSkgRCvNCdAg&oe=6554A889",
+                  : "https://scontent-hkg4-1.xx.fbcdn.net/v/t39.30808-6/374575380_1926685071044145_3041714391982645797_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFLzjWsw0sK2TBfrUpHpxCfwkxYK_Hi4pbCTFgr8eLiljvEywYNTVwlgu5W2E-vRkaJJw0hr5xoLhiBwH2aHJUy&_nc_ohc=e672M_bWM1oAX-TLDCj&_nc_ht=scontent-hkg4-1.xx&oh=00_AfDjG3afSXjErYTeAyDgIQVWXHzH5OYUvfVOAcRLS2sITw&oe=6564FFA1",
               width: 160.0,
               height: 160.0,
               fit: BoxFit.cover,

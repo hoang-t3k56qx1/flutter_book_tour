@@ -31,9 +31,9 @@ class _HomeViewState extends State<HomeView>
 
   Future<void> dataTour() async {
     final provider = context.read<TourProvide>();
-    if(provider.stateNoiBat.tours.isEmpty){
+    // if(provider.stateNoiBat.tours.isEmpty){
       await provider.listTourNoiBat();
-    }
+    // }
     await provider.listTour(textEditingController.text.trim() ?? "");
     setState(() {});
   }
