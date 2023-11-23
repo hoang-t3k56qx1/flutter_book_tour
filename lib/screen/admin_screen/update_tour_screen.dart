@@ -551,10 +551,10 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                     ? context.read<TourProvide>().stateUpdate
                     // ignore: use_build_context_synchronously
                     : context.read<TourProvide>().stateCreate;
-                if (state.status == ListTourState.loading) {
+                if (state.status == Status.loading) {
                   ShowThongBao.show("loading");
                 }
-                if (state.status == ListTourState.success) {
+                if (state.status == Status.success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text((type == "UPDATE")
@@ -574,7 +574,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                   Navigator.of(context).pop();
                   // await data();
                 }
-                if (state.status == ListTourState.failure) {
+                if (state.status == Status.failure) {
                   ShowThongBao.show("failure");
                 }
                 ShowThongBao.show("failure");

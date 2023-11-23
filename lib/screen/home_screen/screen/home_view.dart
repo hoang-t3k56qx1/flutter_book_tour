@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../assets_manager.dart';
 import '../../../model/tour_model.dart';
+import '../../../provider/user_provider.dart';
 import '../../notifi_screen/notifi_screen.dart';
 import 'home/book_tour_screen.dart';
 import 'home/item_tour_view.dart';
@@ -115,10 +116,10 @@ class _HomeViewState extends State<HomeView>
 
   Widget _buidListTour() {
     final state = Provider.of<TourProvide>(context, listen: false).state;
-    if (state.status == ListTourState.loading) {
+    if (state.status == Status.loading) {
       return ShowThongBao.show("loading");
     }
-    if (state.status == ListTourState.success) {
+    if (state.status == Status.success) {
       List<Tour> listTour = [];
       listTour = state.tours;
       return (listTour.isNotEmpty)
@@ -159,7 +160,7 @@ class _HomeViewState extends State<HomeView>
             )
           : ShowThongBao.show("nodata");
     }
-    if (state.status == ListTourState.failure) {
+    if (state.status == Status.failure) {
       return ShowThongBao.show("failure");
     }
     return ShowThongBao.show("failure");
@@ -167,10 +168,10 @@ class _HomeViewState extends State<HomeView>
 
   Widget _buildNoiBat() {
     final state = Provider.of<TourProvide>(context, listen: false).stateNoiBat;
-    if (state.status == ListTourState.loading) {
+    if (state.status == Status.loading) {
       return ShowThongBao.show("loading");
     }
-    if (state.status == ListTourState.success) {
+    if (state.status == Status.success) {
       List<Tour> listTourNoiBat = [];
       listTourNoiBat = state.tours;
       return (listTourNoiBat.isNotEmpty)
@@ -189,7 +190,7 @@ class _HomeViewState extends State<HomeView>
             )
           : ShowThongBao.show("nodata");
     }
-    if (state.status == ListTourState.failure) {
+    if (state.status == Status.failure) {
       return ShowThongBao.show("failure");
     }
     return TinTucView(

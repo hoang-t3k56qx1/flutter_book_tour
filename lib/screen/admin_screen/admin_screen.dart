@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../assets_manager.dart';
 import '../../model/tour_model.dart';
 import '../../provider/tour_provider.dart';
+import '../../provider/user_provider.dart';
 import '../home_screen/screen/home/book_tour_screen.dart';
 import '../home_screen/screen/home_screen_view.dart';
 import '../home_screen/screen/home/item_tour_view.dart';
@@ -79,10 +80,10 @@ class _AdminScreenViewState extends State<AdminScreenView> {
     final provider = Provider.of<TourProvide>(context, listen: false);
     final state = provider.state;
 
-    if (state.status == ListTourState.loading) {
+    if (state.status == Status.loading) {
       return ShowThongBao.show("loading");
     }
-    if (state.status == ListTourState.success) {
+    if (state.status == Status.success) {
       listTour = state.tours;
       listTour = listTour.reversed.toList();
       return (listTour.isNotEmpty)
@@ -114,7 +115,7 @@ class _AdminScreenViewState extends State<AdminScreenView> {
             )
           : ShowThongBao.show("nodata");
     }
-    if (state.status == ListTourState.failure) {
+    if (state.status == Status.failure) {
       return ShowThongBao.show("failure");
     }
     return ShowThongBao.show("failure");
@@ -141,10 +142,10 @@ class _AdminScreenViewState extends State<AdminScreenView> {
                 await provider.deleteTour(item.id);
                 final stateDelete = provider.stateDelete;
 
-                if (stateDelete.status == ListTourState.loading) {
+                if (stateDelete.status == Status.loading) {
                   ShowThongBao.show("loading");
                 }
-                if (stateDelete.status == ListTourState.success) {
+                if (stateDelete.status == Status.success) {
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -161,7 +162,7 @@ class _AdminScreenViewState extends State<AdminScreenView> {
                     ),
                   );
                 }
-                if (stateDelete.status == ListTourState.failure) {
+                if (stateDelete.status == Status.failure) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Tour không thể xóa vì đã lưu trữ đơn đặt!'),
