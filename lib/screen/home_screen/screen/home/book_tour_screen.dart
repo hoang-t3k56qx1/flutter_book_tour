@@ -320,7 +320,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                 }
                 if (state == Status.success) {
                   // ignore: use_build_context_synchronously
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

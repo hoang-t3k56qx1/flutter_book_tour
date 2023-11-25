@@ -133,7 +133,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                     icon: const Icon(Icons.edit),
                     onPressed: () {
                       TextAreaBottomSheet.show(
-                        title: 'Nhập mô tả',
+                        title: 'Nhập tên',
                         context: context,
                         text: _tenController.text,
                         maxLength: 500,
